@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ${dockerValues.applicationName}
+spec:
+  selector:
+    app: ${dockerValues.applicationName}
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${dockerValues.applicationName}
+spec:
+  selector:
+    matchLabels:
+      app: ${dockerValues.applicationName}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ${dockerValues.applicationName}
+    spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+      - name: ${dockerValues.applicationName}
+        imagePullPolicy: Always
+        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+        ports:
+        - containerPort: 80

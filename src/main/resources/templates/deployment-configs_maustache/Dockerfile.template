@@ -1,0 +1,5 @@
+FROM tomcat:8.5.84-jre11
+ADD {{{applicationNameAsReceived}}}.war /usr/local/tomcat/webapps/
+EXPOSE 8080
+CMD chmod +x /usr/local/tomcat/bin/catalina.sh
+CMD ["catalina.sh", "run"]

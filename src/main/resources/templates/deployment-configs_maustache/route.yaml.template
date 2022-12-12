@@ -1,0 +1,11 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{{applicationName}}}-route
+spec:
+  host: {{{applicationName}}}-route-{{{namespace_Name}}}.{{{Ingress_Domain}}}
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: {{{applicationName}}}

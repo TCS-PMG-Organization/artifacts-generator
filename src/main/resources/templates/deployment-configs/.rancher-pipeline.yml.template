@@ -1,0 +1,21 @@
+stages:
+- name: stage
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: ${dockerValues.applicationName}:${CICD_EXECUTION_SEQUENCE}
+      registry: 127.0.0.1:34104
+    env:
+      PLUGIN_DEBUG: "true"
+      PLUGIN_INSECURE: "true"
+  when:
+    branch:
+      include:
+      - main
+- name: deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
+timeout: 60
+notification: {}
